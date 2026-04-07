@@ -1,0 +1,36 @@
+spring:
+
+  application:
+
+    name: medassist_back
+
+  user-service:
+    secret-key: secretKeysecretKeysecretKeysecretKeysecretKey
+    access-token-expiration: 900000
+    refresh-token-expiration: 86400000
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/medassist
+    username: postgres
+    password:
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    hibernate:
+      dl-auto: validate
+    show-sql: true
+
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+    enabled: true
+    contexts: dev
+
+#logging:
+#  level:
+#    owl.medassist_back: DEBUG
+#    org.springframework.web: DEBUG
+#    org.hibernate: DEBUG
