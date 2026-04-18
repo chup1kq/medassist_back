@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/changeset/0001_init_specialists.sql
+  - include:
+      file: db/changelog/changeset/0002_init_services.sql
+  - include:
+      file: db/changelog/changeset/0003_init_service_prices.sql
+  - include:
+      file: db/changelog/changeset/0004_init_indications.sql
+  - include:
+      file: db/changelog/changeset/0005_init_reviews.sql
+  - include:
+      file: db/changelog/changeset/0006_init_medical_facilities.sql
+  - include:
+      file: db/changelog/changeset/0007_init_schedules.sql
+  - include:
+      file: db/changelog/changeset/0008_init_documents.sql
