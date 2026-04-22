@@ -17,7 +17,7 @@ public record SpecialistUpsertDto(
         Integer experienceYears,
         @NotNull(message = "active is required")
         Boolean active,
-        List<@NotBlank(message = "specialization name must not be blank") @Size(max = 255, message = "specialization name length must be <= 255") String> specializations
+        List<Integer> specializationIds
 ) {
 }
 

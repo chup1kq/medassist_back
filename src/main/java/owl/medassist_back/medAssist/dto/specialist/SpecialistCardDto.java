@@ -8,7 +8,7 @@ public record SpecialistCardDto(
         String description,
         Integer experienceYears,
         String photoUrl,
-        List<String> specializations
+        List<SpecializationDto> specializations
 ) {
 }
 

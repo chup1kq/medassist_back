@@ -12,7 +12,7 @@ public record SpecialistDto(
         Integer experienceYears,
         String photoUrl,
         Boolean active,
-        List<String> specializations,
+        List<SpecializationDto> specializations,
         List<ScheduleDto> schedules,
         List<ReviewDto> reviews
 ) {
