@@ -12,28 +12,27 @@ import java.util.List;
 public interface DocumentRepository extends JpaRepository<Document, Integer> {
 
     @Query("""
-        SELECT d FROM Document d
-        WHERE (:query IS NULL
-                OR lower(d.name) LIKE lower(concat('%', :query, '%'))
-                OR lower(coalesce(d.description, '')) LIKE lower(concat('%', :query, '%')))
-          AND (:documentType IS NULL OR lower(d.documentType.name) = lower(:documentType))
-        ORDER BY d.name
-        """)
+                select d from Document d
+                where (:query is null
+                    or lower(d.name) like lower(concat('%', :query, '%'))
+                    or lower(coalesce(d.description, '')) like lower(concat('%', :query, '%')))
+                  and (:documentTypeId is null or d.documentType.id = :documentTypeId)
+            """)
     List<Document> search(
             @Param("query") String query,
-            @Param("documentType") String documentType
+            @Param("documentTypeId") Integer documentTypeId
     );
 
     @Query("""
-        SELECT d FROM Document d
-        WHERE (:query IS NULL
-                OR lower(d.name) LIKE lower(concat('%', :query, '%'))
-                OR lower(coalesce(d.description, '')) LIKE lower(concat('%', :query, '%')))
-          AND (:documentType IS NULL OR lower(d.documentType.name) = lower(:documentType))
-        """)
+                select d from Document d
+                where (:query is null
+                    or lower(d.name) like lower(concat('%', :query, '%'))
+                    or lower(coalesce(d.description, '')) like lower(concat('%', :query, '%')))
+                  and (:documentTypeId is null or d.documentType.id = :documentTypeId)
+            """)
     Page<Document> search(
             @Param("query") String query,
-            @Param("documentType") String documentType,
+            @Param("documentTypeId") Integer documentTypeId,
             Pageable pageable
     );
 }
