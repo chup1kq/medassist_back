@@ -1,6 +1,7 @@
 package owl.medassist_back.medAssist.mapper;
 
 import org.mapstruct.Mapper;
+import owl.medassist_back.medAssist.dto.specialist.SpecialistCardDto;
 import owl.medassist_back.medAssist.dto.specialist.SpecialistDto;
 import owl.medassist_back.medAssist.entity.specialist.Specialist;
 
@@ -15,4 +16,6 @@ import owl.medassist_back.medAssist.entity.specialist.Specialist;
 public interface SpecialistMapper {
 
     SpecialistDto toDto(Specialist specialist);
+
+    SpecialistCardDto toCardDto(Specialist specialist);
 }
