@@ -4,6 +4,9 @@ spring:
 
     name: medassist_back
 
+  page:
+    page-size: 10
+
   user-service:
     secret-key: secretKeysecretKeysecretKeysecretKeysecretKey
     access-token-expiration: 900000
