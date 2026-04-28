@@ -10,7 +10,7 @@ import owl.medassist_back.userService.dto.LoginRequestDto;
 import owl.medassist_back.userService.service.AuthService;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 public class AuthController {
 

@@ -12,7 +12,7 @@ import owl.medassist_back.userService.dto.UserDto;
 import owl.medassist_back.userService.service.UserService;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
 public class UserController {
 
