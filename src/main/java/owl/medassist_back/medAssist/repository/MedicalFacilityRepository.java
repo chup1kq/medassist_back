@@ -11,8 +11,8 @@ public interface MedicalFacilityRepository extends JpaRepository<MedicalFacility
 
 	@Query("""
 			select mf from MedicalFacility mf
-			where (:querry is null or lower(mf.name) like lower(concat('%', :querry, '%')))
+			where (:query is null or lower(mf.name) like lower(concat('%', :query, '%')))
 			""")
-	Page<MedicalFacility> search(@Param("querry") String querry, Pageable pageable);
+	Page<MedicalFacility> search(@Param("query") String query, Pageable pageable);
 }
 

@@ -18,13 +18,13 @@ public interface DocumentTypeRepository extends JpaRepository<DocumentType, Inte
 
     @Query("""
             select d from DocumentType d
-            where (:querry is null or lower(d.name) like lower(concat('%', :querry, '%')))
+            where (:query is null or lower(d.name) like lower(concat('%', :query, '%')))
             """)
-    Page<DocumentType> search(@Param("querry") String querry, Pageable pageable);
+    Page<DocumentType> search(@Param("query") String query, Pageable pageable);
 
     @Query("""
             select d from DocumentType d
-            where (:querry is null or lower(d.name) like lower(concat('%', :querry, '%')))
+            where (:query is null or lower(d.name) like lower(concat('%', :query, '%')))
             """)
-    List<DocumentType> search(@Param("querry") String querry);
+    List<DocumentType> search(@Param("query") String query);
 }

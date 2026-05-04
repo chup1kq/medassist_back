@@ -32,10 +32,10 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Integer> {
             join sch.specialistFacility sf
             join sf.specialist sp
             join sf.facility f
-            where (:querry is null
-                or lower(sp.fullName) like lower(concat('%', :querry, '%'))
-                or lower(f.name) like lower(concat('%', :querry, '%')))
+            where (:query is null
+                or lower(sp.fullName) like lower(concat('%', :query, '%'))
+                or lower(f.name) like lower(concat('%', :query, '%')))
             """)
-    Page<Schedule> search(@Param("querry") String querry, Pageable pageable);
+    Page<Schedule> search(@Param("query") String query, Pageable pageable);
 }
 

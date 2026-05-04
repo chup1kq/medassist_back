@@ -17,9 +17,9 @@ public interface ServicePriceRepository extends JpaRepository<ServicePrice, Inte
 
     @Query("""
             select sp from ServicePrice sp
-            where (:querry is null or lower(sp.name) like lower(concat('%', :querry, '%')))
+            where (:query is null or lower(sp.name) like lower(concat('%', :query, '%')))
             """)
-    Page<ServicePrice> search(@Param("querry") String querry, Pageable pageable);
+    Page<ServicePrice> search(@Param("query") String query, Pageable pageable);
 }
 
 

@@ -32,8 +32,8 @@ public interface SpecialistRepository extends JpaRepository<Specialist, Integer>
     })
     @org.springframework.data.jpa.repository.Query("""
             select s from Specialist s
-            where (:querry is null or lower(s.fullName) like lower(concat('%', :querry, '%')))
+            where (:query is null or lower(s.fullName) like lower(concat('%', :query, '%')))
             """)
-    Page<Specialist> searchByFullName(@Param("querry") String querry, Pageable pageable);
+    Page<Specialist> searchByFullName(@Param("query") String query, Pageable pageable);
 }
 
