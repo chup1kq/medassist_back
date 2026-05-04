@@ -34,6 +34,18 @@ public enum ExceptionName {
             "Service price not found.",
             HttpStatus.NOT_FOUND
     ),
+    CONDITION_NOT_FOUND(
+            "Condition not found.",
+            HttpStatus.NOT_FOUND
+    ),
+    SPECIALIZATION_NOT_FOUND(
+            "Specialization not found.",
+            HttpStatus.NOT_FOUND
+    ),
+    DOCUMENT_TYPE_NOT_FOUND(
+            "Document type not found.",
+            HttpStatus.NOT_FOUND
+    ),
     SCHEDULE_NOT_FOUND(
             "Schedule slot not found.",
             HttpStatus.NOT_FOUND
@@ -57,6 +69,46 @@ public enum ExceptionName {
     DUPLICATE_SERVICE_URL(
             "Service URL must be unique.",
             HttpStatus.CONFLICT
+    ),
+    DUPLICATE_CONDITION_TEXT(
+            "Condition text must be unique.",
+            HttpStatus.CONFLICT
+    ),
+    DUPLICATE_SPECIALIZATION_NAME(
+            "Specialization name must be unique.",
+            HttpStatus.CONFLICT
+    ),
+    DUPLICATE_DOCUMENT_TYPE_NAME(
+            "Document type name must be unique.",
+            HttpStatus.CONFLICT
+    ),
+    INVALID_APPOINTMENT_ID(
+            "Appointment ID must be greater than 0.",
+            HttpStatus.BAD_REQUEST
+    ),
+    INVALID_SCHEDULE_DATE(
+            "Schedule date must not be in the past.",
+            HttpStatus.BAD_REQUEST
+    ),
+    APPOINTMENT_CREATE_FAILED(
+            "Failed to create appointment in MIS.",
+            HttpStatus.BAD_GATEWAY
+    ),
+    APPOINTMENT_CANCEL_FAILED(
+            "Failed to cancel appointment in MIS.",
+            HttpStatus.BAD_GATEWAY
+    ),
+    SCHEDULE_DAY_FETCH_FAILED(
+            "Failed to fetch daily schedule from MIS.",
+            HttpStatus.BAD_GATEWAY
+    ),
+    SCHEDULE_PERIOD_FETCH_FAILED(
+            "Failed to fetch two-week schedule from MIS.",
+            HttpStatus.BAD_GATEWAY
+    ),
+    MIS_UNAVAILABLE(
+            "MIS is temporarily unavailable.",
+            HttpStatus.SERVICE_UNAVAILABLE
     );
 
     private final String message;
