@@ -7,7 +7,6 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalTime;
 
 public record ScheduleUpsertDto(
-        Integer specialistFacilityId,
         Integer specialistId,
         Integer facilityId,
         @NotNull(message = "dayOfWeek is required")
@@ -19,5 +18,10 @@ public record ScheduleUpsertDto(
         @NotNull(message = "endTime is required")
         LocalTime endTime
 ) {
+
+    public ScheduleUpsertDto(Integer specialistFacilityId, Integer specialistId, Integer facilityId,
+                             Integer dayOfWeek, LocalTime startTime, LocalTime endTime) {
+        this(specialistId, facilityId, dayOfWeek, startTime, endTime);
+    }
 }
 

@@ -470,11 +470,6 @@ public class MedAssistAdminService {
     }
 
     private SpecialistFacility resolveSpecialistFacility(ScheduleUpsertDto request) {
-        if (request.specialistFacilityId() != null) {
-            return specialistFacilityRepository.findById(request.specialistFacilityId())
-                    .orElseThrow(() -> new BaseAppException(ExceptionName.SPECIALIST_FACILITY_NOT_FOUND));
-        }
-
         if (request.specialistId() == null || request.facilityId() == null) {
             throw new BaseAppException(ExceptionName.SCHEDULE_TARGET_REQUIRED);
         }

@@ -136,9 +136,10 @@ public class MedAssistAdminController {
     @GetMapping("/schedules")
     public Page<ScheduleDto> getSchedules(
             @RequestParam(defaultValue = "0") @Min(0) int page,
-            @RequestParam(required = false) String query
+            @RequestParam(required = false, name = "specialistQuery") String specialistQuery,
+            @RequestParam(required = false, name = "facilityQuery") String facilityQuery
     ) {
-        return medAssistAdminService.getSchedules(page, query);
+        return medAssistAdminService.getSchedules(page, specialistQuery, facilityQuery);
     }
 
     @PostMapping("/schedules")

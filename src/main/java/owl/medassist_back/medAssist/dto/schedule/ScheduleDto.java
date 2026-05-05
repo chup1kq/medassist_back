@@ -4,6 +4,10 @@ import java.time.LocalTime;
 
 public record ScheduleDto(
         Integer id,
+        Integer specialistId,
+        String specialistName,
+        Integer facilityId,
+        String facilityName,
         Integer dayOfWeek,
         LocalTime startTime,
         LocalTime endTime

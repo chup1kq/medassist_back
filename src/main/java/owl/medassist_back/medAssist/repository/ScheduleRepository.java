@@ -19,7 +19,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Integer> {
             where (:specialistId is null or sp.id = :specialistId)
               and (:facilityId is null or f.id = :facilityId)
               and (:dayOfWeek is null or sch.dayOfWeek = :dayOfWeek)
-            order by sch.dayOfWeek, sch.startTime
+            order by f.name, sch.dayOfWeek, sch.startTime
             """)
     List<Schedule> findByFilters(
             @Param("specialistId") Integer specialistId,
@@ -32,10 +32,10 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Integer> {
             join sch.specialistFacility sf
             join sf.specialist sp
             join sf.facility f
-            where (:query is null
-                or lower(sp.fullName) like lower(concat('%', :query, '%'))
-                or lower(f.name) like lower(concat('%', :query, '%')))
+            where (:specialistQuery is null or lower(sp.fullName) like lower(concat('%', :specialistQuery, '%')))
+              and (:facilityQuery is null or lower(f.name) like lower(concat('%', :facilityQuery, '%')))
+            order by f.name, sch.dayOfWeek, sch.startTime
             """)
-    Page<Schedule> search(@Param("query") String query, Pageable pageable);
+    Page<Schedule> search(@Param("specialistQuery") String specialistQuery, @Param("facilityQuery") String facilityQuery, Pageable pageable);
 }
 
