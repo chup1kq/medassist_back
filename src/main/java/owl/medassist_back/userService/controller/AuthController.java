@@ -49,6 +49,16 @@ public class AuthController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<UserDto> me(Authentication authentication) {
+
+        if (authentication == null || !(authentication.getPrincipal() instanceof User user)) {
+            return ResponseEntity.status(401).build();
+        }
+
+        return ResponseEntity.ok(new UserDto(user.getId(), user.getLogin()));
+    }
+
     private void addCookie(HttpServletResponse response, AuthResponseDto authResponse) {
         addCookie(response, "accessToken", authResponse.accessToken(), authResponse.accessTokenExpiration());
         addCookie(response, "refreshToken", authResponse.refreshToken(), authResponse.refreshTokenExpiration());
