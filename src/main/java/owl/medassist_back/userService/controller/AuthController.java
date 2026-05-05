@@ -7,7 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import owl.medassist_back.userService.dto.AuthResponseDto;
 import owl.medassist_back.userService.dto.LoginRequestDto;
+import owl.medassist_back.userService.dto.LoginResultDto;
+import owl.medassist_back.userService.dto.UserDto;
 import owl.medassist_back.userService.service.AuthService;
+import org.springframework.security.core.Authentication;
+import owl.medassist_back.userService.entity.User;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -17,15 +21,15 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(
+    public ResponseEntity<UserDto> login(
             @RequestBody LoginRequestDto request,
             HttpServletResponse response
     ) {
 
-        AuthResponseDto tokens = authService.login(request);
-        addCookie(response, tokens);
+        LoginResultDto loginResult = authService.login(request);
+        addCookie(response, loginResult.tokens());
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(loginResult.user());
     }
 
     @PostMapping("/refresh")
@@ -70,7 +74,7 @@ public class AuthController {
 
         cookie.setHttpOnly(true);
         cookie.setSecure(false);
-        cookie.setPath("/auth");
+        cookie.setPath("/");
         cookie.setMaxAge(maxAge);
 
         response.addCookie(cookie);
@@ -82,7 +86,7 @@ public class AuthController {
 
         cookie.setHttpOnly(true);
         cookie.setSecure(false);
-        cookie.setPath("/auth");
+        cookie.setPath("/");
         cookie.setMaxAge(0);
 
         response.addCookie(cookie);

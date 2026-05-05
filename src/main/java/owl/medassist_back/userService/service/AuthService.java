@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import owl.medassist_back.userService.dto.AuthResponseDto;
 import owl.medassist_back.userService.dto.LoginRequestDto;
+import owl.medassist_back.userService.dto.LoginResultDto;
+import owl.medassist_back.userService.dto.UserDto;
 import owl.medassist_back.userService.entity.User;
 
 import java.util.Optional;
@@ -19,14 +21,15 @@ public class AuthService {
 
     private final UserService userService;
 
-    public AuthResponseDto login(@NotNull LoginRequestDto request) {
+    public LoginResultDto login(@NotNull LoginRequestDto request) {
 
         User user = safelyRemove(userService.findByLogin(request.login()));
 
         AuthResponseDto response = jwtService.generateTokens(user);
+        UserDto userDto = new UserDto(user.getId(), user.getLogin());
         log.info("User {} logged in", user.getLogin());
 
-        return response;
+        return new LoginResultDto(response, userDto);
     }
 
     public AuthResponseDto refreshToken(@NotNull String refreshToken) {
