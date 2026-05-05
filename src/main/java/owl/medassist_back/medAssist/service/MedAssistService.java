@@ -4,12 +4,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import owl.medassist_back.exception.BaseAppException;
 import owl.medassist_back.exception.ExceptionName;
+import owl.medassist_back.medAssist.dto.condition.ConditionDto;
 import owl.medassist_back.medAssist.dto.document.DocumentDto;
+import owl.medassist_back.medAssist.dto.document.DocumentTypeDto;
 import owl.medassist_back.medAssist.dto.medicalService.MedicalServiceCardDto;
 import owl.medassist_back.medAssist.dto.medicalService.MedicalServiceDto;
 import owl.medassist_back.medAssist.dto.medicalService.MedicalServiceNameDto;
@@ -24,10 +27,13 @@ import owl.medassist_back.medAssist.entity.review.Review;
 import owl.medassist_back.medAssist.entity.schedule.Schedule;
 import owl.medassist_back.medAssist.entity.specialist.Specialist;
 import owl.medassist_back.medAssist.mapper.*;
+import owl.medassist_back.medAssist.repository.ConditionRepository;
 import owl.medassist_back.medAssist.repository.DocumentRepository;
+import owl.medassist_back.medAssist.repository.DocumentTypeRepository;
 import owl.medassist_back.medAssist.repository.MedicalServiceRepository;
 import owl.medassist_back.medAssist.repository.ScheduleRepository;
 import owl.medassist_back.medAssist.repository.SpecialistRepository;
+import owl.medassist_back.medAssist.repository.SpecializationRepository;
 import owl.medassist_back.medAssist.repository.SpecialistSpecification;
 
 import java.util.Comparator;
@@ -45,6 +51,9 @@ public class MedAssistService {
     private final SpecialistRepository specialistRepository;
     private final ScheduleRepository scheduleRepository;
     private final DocumentRepository medicalDocumentRepository;
+    private final ConditionRepository conditionRepository;
+    private final SpecializationRepository specializationRepository;
+    private final DocumentTypeRepository documentTypeRepository;
 
     private final DocumentMapper documentMapper;
     private final MedicalServiceMapper medicalServiceMapper;
@@ -52,10 +61,31 @@ public class MedAssistService {
     private final ScheduleMapper scheduleMapper;
     private final ReviewMapper reviewMapper;
     private final SpecializationMapper specializationMapper;
+    private final ConditionMapper conditionMapper;
+    private final DocumentTypeMapper documentTypeMapper;
 
 
     public Page<MedicalServiceCardDto> getServices(String query, int page) {
         return medicalServiceRepository.findAllCards(query, PageRequest.of(page, pageSize));
+    }
+
+    public Page<ConditionDto> getConditions(int page, String querry) {
+        return conditionRepository.search(normalize(querry), PageRequest.of(page, pageSize, Sort.by("text").ascending()))
+                .map(conditionMapper::toDto);
+    }
+
+    public List<SpecializationDto> getSpecializations(String querry) {
+        return specializationRepository.search(normalize(querry))
+                .stream()
+                .map(specializationMapper::toDto)
+                .toList();
+    }
+
+    public List<DocumentTypeDto> getDocumentTypes(String querry) {
+        return documentTypeRepository.search(normalize(querry))
+                .stream()
+                .map(documentTypeMapper::toDto)
+                .toList();
     }
 
     public List<MedicalServiceNameDto> getServiceNames(String query) {
@@ -166,7 +196,9 @@ public class MedAssistService {
     }
 
     private String normalize(String value) {
-        return value == null ? null : value.toLowerCase().trim();
+        return (value == null || value.isBlank())
+                ? ""
+                : value.toLowerCase().trim();
     }
 }
 
