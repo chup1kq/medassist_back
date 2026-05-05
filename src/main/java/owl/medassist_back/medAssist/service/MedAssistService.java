@@ -69,20 +69,20 @@ public class MedAssistService {
         return medicalServiceRepository.findAllCards(query, PageRequest.of(page, pageSize));
     }
 
-    public Page<ConditionDto> getConditions(int page, String querry) {
-        return conditionRepository.search(normalize(querry), PageRequest.of(page, pageSize, Sort.by("text").ascending()))
+    public Page<ConditionDto> getConditions(int page, String query) {
+        return conditionRepository.search(normalize(query), PageRequest.of(page, pageSize, Sort.by("text").ascending()))
                 .map(conditionMapper::toDto);
     }
 
-    public List<SpecializationDto> getSpecializations(String querry) {
-        return specializationRepository.search(normalize(querry))
+    public List<SpecializationDto> getSpecializations(String query) {
+        return specializationRepository.search(normalize(query))
                 .stream()
                 .map(specializationMapper::toDto)
                 .toList();
     }
 
-    public List<DocumentTypeDto> getDocumentTypes(String querry) {
-        return documentTypeRepository.search(normalize(querry))
+    public List<DocumentTypeDto> getDocumentTypes(String query) {
+        return documentTypeRepository.search(normalize(query))
                 .stream()
                 .map(documentTypeMapper::toDto)
                 .toList();

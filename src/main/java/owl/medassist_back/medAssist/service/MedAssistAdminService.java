@@ -107,37 +107,37 @@ public class MedAssistAdminService {
         medicalServiceRepository.delete(service);
     }
 
-    public Page<MedicalServiceCardDto> getServices(int page, String querry) {
-        return medicalServiceRepository.findAllCards(normalize(querry), PageRequest.of(page, pageSize, Sort.by("name").ascending()));
+    public Page<MedicalServiceCardDto> getServices(int page, String query) {
+        return medicalServiceRepository.findAllCards(normalize(query), PageRequest.of(page, pageSize, Sort.by("name").ascending()));
     }
 
-    public Page<ServicePriceDto> getServicePrices(int page, String querry) {
-        return servicePriceRepository.search(normalize(querry), PageRequest.of(page, pageSize, Sort.by("name").ascending()))
+    public Page<ServicePriceDto> getServicePrices(int page, String query) {
+        return servicePriceRepository.search(normalize(query), PageRequest.of(page, pageSize, Sort.by("name").ascending()))
                 .map(servicePriceMapper::toDto);
     }
 
-    public Page<SpecialistCardDto> getSpecialists(int page, String querry) {
-        return specialistRepository.searchByFullName(normalize(querry), PageRequest.of(page, pageSize, Sort.by("fullName").ascending()))
+    public Page<SpecialistCardDto> getSpecialists(int page, String query) {
+        return specialistRepository.searchByFullName(normalize(query), PageRequest.of(page, pageSize, Sort.by("fullName").ascending()))
                 .map(specialistMapper::toCardDto);
     }
 
-    public Page<DocumentDto> getDocuments(int page, String querry) {
-        return documentRepository.search(normalize(querry), null, PageRequest.of(page, pageSize, Sort.by("name").ascending()))
+    public Page<DocumentDto> getDocuments(int page, String query) {
+        return documentRepository.search(normalize(query), null, PageRequest.of(page, pageSize, Sort.by("name").ascending()))
                 .map(documentMapper::toDto);
     }
 
-    public Page<ScheduleDto> getSchedules(int page, String querry) {
-        return scheduleRepository.search(normalize(querry), PageRequest.of(page, pageSize, Sort.by("dayOfWeek").ascending().and(Sort.by("startTime").ascending())))
+    public Page<ScheduleDto> getSchedules(int page, String specialistQuery, String facilityQuery) {
+        return scheduleRepository.search(normalize(specialistQuery), normalize(facilityQuery), PageRequest.of(page, pageSize))
                 .map(scheduleMapper::toDto);
     }
 
-    public Page<MedicalFacilityDto> getFacilities(int page, String querry) {
-        return medicalFacilityRepository.search(normalize(querry), PageRequest.of(page, pageSize, Sort.by("name").ascending()))
+    public Page<MedicalFacilityDto> getFacilities(int page, String query) {
+        return medicalFacilityRepository.search(normalize(query), PageRequest.of(page, pageSize, Sort.by("name").ascending()))
                 .map(medicalFacilityMapper::toDto);
     }
 
-    public Page<ConditionDto> getConditions(int page, String querry) {
-        return conditionRepository.search(normalize(querry), PageRequest.of(page, pageSize, Sort.by("text").ascending()))
+    public Page<ConditionDto> getConditions(int page, String query) {
+        return conditionRepository.search(normalize(query), PageRequest.of(page, pageSize, Sort.by("text").ascending()))
                 .map(conditionMapper::toDto);
     }
 
@@ -224,8 +224,8 @@ public class MedAssistAdminService {
         specializationRepository.delete(specialization);
     }
 
-    public Page<DocumentTypeDto> getDocumentTypes(int page, String querry) {
-        return documentTypeRepository.search(normalize(querry), PageRequest.of(page, pageSize, Sort.by("name").ascending()))
+    public Page<DocumentTypeDto> getDocumentTypes(int page, String query) {
+        return documentTypeRepository.search(normalize(query), PageRequest.of(page, pageSize, Sort.by("name").ascending()))
                 .map(documentTypeMapper::toDto);
     }
 
