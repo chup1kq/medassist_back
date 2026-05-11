@@ -17,3 +17,5 @@ databaseChangeLog:
       file: db/changelog/changeset/0007_init_schedules.sql
   - include:
       file: db/changelog/changeset/0008_init_documents.sql
+  - include:
+      file: db/changelog/changeset/0009_init_service_specialists.sql
