@@ -37,6 +37,9 @@ public class MedicalService {
     @Column(name = "photo_url")
     private String photoUrl;
 
+    @Column(name = "mis_id", nullable = false)
+    private Integer misId = 0;
+
     @OneToMany(
             mappedBy = "service",
             cascade = CascadeType.ALL,

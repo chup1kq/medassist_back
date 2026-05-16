@@ -1,6 +1,7 @@
 package owl.medassist_back.medAssist.dto.medicalService;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
@@ -17,6 +18,8 @@ public record MedicalServiceUpsertDto(
         String url,
         @Size(max = 500, message = "photoUrl length must be <= 500")
         String photoUrl,
+        @Min(value = 0, message = "misId must be >= 0")
+        Integer misId,
         List<@Positive(message = "indication id must be > 0") Integer> indicationIds,
         List<@Positive(message = "contraindication id must be > 0") Integer> contraindicationIds,
         List<@Positive(message = "specialist id must be > 0") Integer> specialistIds

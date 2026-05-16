@@ -1,15 +1,15 @@
 package owl.medassist_back.medAssist.dto.servicePrice;
 
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 
 public record ServicePriceUpsertDto(
         @NotNull(message = "serviceId is required")
         Integer serviceId,
+        @NotNull(message = "misId is required")
+        @Min(value = 0, message = "misId must be >= 0")
+        Integer misId,
         @NotBlank(message = "name is required")
         @Size(max = 255, message = "name length must be <= 255")
         String name,

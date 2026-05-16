@@ -34,6 +34,9 @@ public class Specialist {
 
     private Boolean active;
 
+    @Column(name = "mis_id", nullable = false)
+    private Integer misId = 0;
+
     @ManyToMany
     @JoinTable(
             name = "specialist_specializations",

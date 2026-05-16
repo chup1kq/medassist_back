@@ -21,6 +21,9 @@ public class ServicePrice {
     @JoinColumn(name = "service_id", nullable = false)
     private MedicalService service;
 
+    @Column(name = "mis_id", nullable = false)
+    private Integer misId = 0;
+
     @Column(nullable = false)
     private String name;
 

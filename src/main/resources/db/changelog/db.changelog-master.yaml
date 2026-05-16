@@ -19,3 +19,9 @@ databaseChangeLog:
       file: db/changelog/changeset/0008_init_documents.sql
   - include:
       file: db/changelog/changeset/0009_init_service_specialists.sql
+  - include:
+      file: db/changelog/changeset/0010_add_mis_id_to_specialists.sql
+  - include:
+      file: db/changelog/changeset/0011_add_mis_id_to_services.sql
+  - include:
+      file: db/changelog/changeset/0012_add_mis_id_to_service_prices.sql

@@ -17,6 +17,8 @@ public record SpecialistUpsertDto(
         Integer experienceYears,
         @NotNull(message = "active is required")
         Boolean active,
+        @Min(value = 0, message = "misId must be >= 0")
+        Integer misId,
         List<Integer> specializationIds
 ) {
 }
