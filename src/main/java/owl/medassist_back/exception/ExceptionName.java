@@ -34,6 +34,10 @@ public enum ExceptionName {
             "Service price not found.",
             HttpStatus.NOT_FOUND
     ),
+    SPECIALIST_FACILITY_TARGET_REQUIRED(
+            "Provide specialistId and facilityId.",
+            HttpStatus.BAD_REQUEST
+    ),
     CONDITION_NOT_FOUND(
             "Condition not found.",
             HttpStatus.NOT_FOUND
@@ -49,6 +53,10 @@ public enum ExceptionName {
     SCHEDULE_NOT_FOUND(
             "Schedule slot not found.",
             HttpStatus.NOT_FOUND
+    ),
+    FACILITY_SCHEDULE_ALREADY_EXISTS(
+            "Medical facility schedule already exists for this day of week.",
+            HttpStatus.CONFLICT
     ),
     APPOINTMENT_TARGET_REQUIRED(
             "Either serviceId or specialistId must be provided.",
@@ -82,12 +90,20 @@ public enum ExceptionName {
             "Document type name must be unique.",
             HttpStatus.CONFLICT
     ),
+    DUPLICATE_SPECIALIST_FACILITY(
+            "Specialist facility relation must be unique.",
+            HttpStatus.CONFLICT
+    ),
     INVALID_APPOINTMENT_ID(
             "Appointment ID must be greater than 0.",
             HttpStatus.BAD_REQUEST
     ),
     INVALID_SCHEDULE_DATE(
             "Schedule date must not be in the past.",
+            HttpStatus.BAD_REQUEST
+    ),
+    INVALID_SCHEDULE_DATA(
+            "Invalid schedule data. If day is closed, times should be null. If day is open, times are required and endTime must be after startTime.",
             HttpStatus.BAD_REQUEST
     ),
     APPOINTMENT_CREATE_FAILED(
