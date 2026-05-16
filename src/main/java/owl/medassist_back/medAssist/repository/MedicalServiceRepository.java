@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import owl.medassist_back.medAssist.dto.medicalService.MedicalServiceCardDto;
 import owl.medassist_back.medAssist.dto.medicalService.MedicalServiceNameDto;
+import owl.medassist_back.medAssist.dto.medicalService.MedicalServiceNameUrlDto;
 import owl.medassist_back.medAssist.entity.medicalService.MedicalService;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public interface MedicalServiceRepository extends JpaRepository<MedicalService, 
 
     @EntityGraph(attributePaths = {
             "prices",
+            "prices.service",
             "indications",
             "contraindications",
             "reviews"
@@ -29,8 +31,34 @@ public interface MedicalServiceRepository extends JpaRepository<MedicalService, 
     @Query("select s from MedicalService s where lower(trim(s.url)) = lower(trim(:url))")
     Optional<MedicalService> findDetailedByUrl(@Param("url") String url);
 
+    @EntityGraph(attributePaths = {
+            "prices",
+            "prices.service",
+            "indications",
+            "contraindications",
+            "reviews"
+    })
+    Optional<MedicalService> findDetailedById(Integer id);
+
+    @EntityGraph(attributePaths = {
+            "prices",
+            "prices.service",
+            "indications",
+            "contraindications",
+            "specialists",
+            "reviews"
+    })
     @Query("""
-                select new owl.medassist_back.medAssist.dto.medicalService.MedicalServiceNameDto(
+            select s from MedicalService s
+            where (:query is null
+                or lower(s.name) like lower(concat('%', :query, '%'))
+                or lower(coalesce(s.description, '')) like lower(concat('%', :query, '%'))
+                or lower(s.url) like lower(concat('%', :query, '%')))
+            """)
+    Page<MedicalService> searchDetailed(@Param("query") String query, Pageable pageable);
+
+    @Query("""
+                select new owl.medassist_back.medAssist.dto.medicalService.MedicalServiceNameUrlDto(
                     s.id,
                     s.name,
                     s.url
@@ -40,7 +68,17 @@ public interface MedicalServiceRepository extends JpaRepository<MedicalService, 
                     or lower(s.name) like lower(concat('%', :query, '%'))
                     or lower(s.url) like lower(concat('%', :query, '%')))
             """)
-    List<MedicalServiceNameDto> findAllNames(@Param("query") String query);
+    List<MedicalServiceNameUrlDto> findAllNameUrl(@Param("query") String query);
+
+    @Query("""
+                select new owl.medassist_back.medAssist.dto.medicalService.MedicalServiceNameDto(
+                    s.id,
+                    s.name
+                )
+                from MedicalService s
+                order by s.name
+            """)
+    List<MedicalServiceNameDto> findAllName();
 
     @Query("""
                 select new owl.medassist_back.medAssist.dto.medicalService.MedicalServiceCardDto(
