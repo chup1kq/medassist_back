@@ -32,6 +32,10 @@ spring:
     enabled: true
     contexts: dev
 
+  mis:
+    api:
+      base-url: http://localhost:8082/api/v1
+
 #logging:
 #  level:
 #    owl.medassist_back: DEBUG
