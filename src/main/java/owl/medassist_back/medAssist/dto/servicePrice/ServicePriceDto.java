@@ -5,7 +5,9 @@ import java.math.BigDecimal;
 public record ServicePriceDto(
         Integer id,
         String name,
-        BigDecimal price
+        BigDecimal price,
+        Integer serviceId,
+        String serviceName
 ) {
 }
 
