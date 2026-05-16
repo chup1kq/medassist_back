@@ -10,6 +10,7 @@ import owl.medassist_back.medAssist.entity.medicalService.MedicalService;
         uses = {
               ServicePriceMapper.class,
               ConditionMapper.class,
+              SpecialistMapper.class,
               ReviewMapper.class
         }
 )
