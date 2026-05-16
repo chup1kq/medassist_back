@@ -5,10 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 import owl.medassist_back.medAssist.entity.medicalFacility.SpecialistFacility;
 import owl.medassist_back.medAssist.entity.review.Review;
+import owl.medassist_back.medAssist.entity.medicalService.MedicalService;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -46,10 +45,11 @@ public class Specialist {
     private Set<Specialization> specializations = new HashSet<>();
 
     @OneToMany(mappedBy = "specialist")
-    private List<SpecialistFacility> specialistFacilities = new ArrayList<>();
+    private Set<SpecialistFacility> specialistFacilities = new HashSet<>();
 
 
     @OneToMany(mappedBy = "specialist")
     private List<Review> reviews = new ArrayList<>();
+    private Set<Review> reviews = new HashSet<>();
 }
 

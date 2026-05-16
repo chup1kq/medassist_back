@@ -7,9 +7,7 @@ import owl.medassist_back.medAssist.entity.review.Review;
 import owl.medassist_back.medAssist.entity.servicePrice.ServicePrice;
 import owl.medassist_back.medAssist.entity.indication.Condition;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -45,7 +43,7 @@ public class MedicalService {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private List<ServicePrice> prices = new ArrayList<>();
+    private Set<ServicePrice> prices = new HashSet<>();
 
     @ManyToMany
     @JoinTable(
@@ -64,5 +62,13 @@ public class MedicalService {
     private Set<Condition> contraindications = new HashSet<>();
 
     @OneToMany(mappedBy = "service")
-    private List<Review> reviews = new ArrayList<>();
+    private Set<Review> reviews = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "service_specialists",
+            joinColumns = @JoinColumn(name = "service_id"),
+            inverseJoinColumns = @JoinColumn(name = "specialist_id")
+    )
+    private Set<Specialist> specialists = new HashSet<>();
 }
