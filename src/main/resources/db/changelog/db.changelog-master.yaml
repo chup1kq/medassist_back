@@ -25,3 +25,5 @@ databaseChangeLog:
       file: db/changelog/changeset/0011_add_mis_id_to_services.sql
   - include:
       file: db/changelog/changeset/0012_add_mis_id_to_service_prices.sql
+  - include:
+      file: db/changelog/changeset/0013_create_medical_facility_schedules_table.sql

@@ -30,5 +30,13 @@ public class MedicalFacility {
             fetch = FetchType.LAZY
     )
     private List<SpecialistFacility> specialistFacilities = new ArrayList<>();
+
+    @OneToMany(
+            mappedBy = "medicalFacility",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<MedicalFacilitySchedule> schedules = new ArrayList<>();
 }
 
