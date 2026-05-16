@@ -6,6 +6,7 @@ import lombok.Setter;
 import owl.medassist_back.medAssist.entity.review.Review;
 import owl.medassist_back.medAssist.entity.servicePrice.ServicePrice;
 import owl.medassist_back.medAssist.entity.indication.Condition;
+import owl.medassist_back.medAssist.entity.specialist.Specialist;
 
 import java.util.HashSet;
 import java.util.Set;

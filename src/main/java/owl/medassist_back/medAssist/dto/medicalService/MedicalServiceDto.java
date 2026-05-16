@@ -3,6 +3,7 @@ package owl.medassist_back.medAssist.dto.medicalService;
 import owl.medassist_back.medAssist.dto.condition.ConditionDto;
 import owl.medassist_back.medAssist.dto.review.ReviewDto;
 import owl.medassist_back.medAssist.dto.servicePrice.ServicePriceDto;
+import owl.medassist_back.medAssist.dto.specialist.SpecialistCardDto;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ public record MedicalServiceDto(
         List<ServicePriceDto> prices,
         List<ConditionDto> indications,
         List<ConditionDto> contraindications,
+        List<SpecialistCardDto> specialists,
         List<ReviewDto> reviews
 ) {
 }

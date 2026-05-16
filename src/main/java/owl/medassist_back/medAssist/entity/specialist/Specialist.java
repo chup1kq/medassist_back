@@ -49,7 +49,9 @@ public class Specialist {
 
 
     @OneToMany(mappedBy = "specialist")
-    private List<Review> reviews = new ArrayList<>();
     private Set<Review> reviews = new HashSet<>();
+
+    @ManyToMany(mappedBy = "specialists")
+    private Set<MedicalService> services = new HashSet<>();
 }
 
