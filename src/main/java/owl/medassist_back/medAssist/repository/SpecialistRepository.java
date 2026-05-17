@@ -21,7 +21,10 @@ public interface SpecialistRepository extends JpaRepository<Specialist, Integer>
             "specialistFacilities",
             "specialistFacilities.facility",
             "specialistFacilities.schedules",
-            "reviews"
+            "reviews",
+            "services",
+            "services.prices",
+            "services.prices.service"
     })
     Optional<Specialist> findDetailedById(Integer id);
 
