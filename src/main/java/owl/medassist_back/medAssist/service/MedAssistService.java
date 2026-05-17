@@ -13,23 +13,27 @@ import owl.medassist_back.exception.ExceptionName;
 import owl.medassist_back.medAssist.dto.condition.ConditionDto;
 import owl.medassist_back.medAssist.dto.document.DocumentDto;
 import owl.medassist_back.medAssist.dto.document.DocumentTypeDto;
+import owl.medassist_back.medAssist.dto.medicalFacility.MedicalFacilityDto;
 import owl.medassist_back.medAssist.dto.medicalService.MedicalServiceCardDto;
 import owl.medassist_back.medAssist.dto.medicalService.MedicalServiceDto;
-import owl.medassist_back.medAssist.dto.medicalService.MedicalServiceNameDto;
+import owl.medassist_back.medAssist.dto.medicalService.MedicalServiceNameUrlDto;
 import owl.medassist_back.medAssist.dto.review.ReviewDto;
 import owl.medassist_back.medAssist.dto.schedule.ScheduleDto;
 import owl.medassist_back.medAssist.dto.search.SearchResponseDto;
 import owl.medassist_back.medAssist.dto.specialist.SpecialistCardDto;
 import owl.medassist_back.medAssist.dto.specialist.SpecialistDto;
+import owl.medassist_back.medAssist.dto.specialist.SpecialistServicePricesDto;
 import owl.medassist_back.medAssist.dto.specialist.SpecializationDto;
 import owl.medassist_back.medAssist.entity.medicalService.MedicalService;
 import owl.medassist_back.medAssist.entity.review.Review;
 import owl.medassist_back.medAssist.entity.schedule.Schedule;
 import owl.medassist_back.medAssist.entity.specialist.Specialist;
+import owl.medassist_back.medAssist.entity.servicePrice.ServicePrice;
 import owl.medassist_back.medAssist.mapper.*;
 import owl.medassist_back.medAssist.repository.ConditionRepository;
 import owl.medassist_back.medAssist.repository.DocumentRepository;
 import owl.medassist_back.medAssist.repository.DocumentTypeRepository;
+import owl.medassist_back.medAssist.repository.MedicalFacilityRepository;
 import owl.medassist_back.medAssist.repository.MedicalServiceRepository;
 import owl.medassist_back.medAssist.repository.ScheduleRepository;
 import owl.medassist_back.medAssist.repository.SpecialistRepository;
@@ -54,19 +58,22 @@ public class MedAssistService {
     private final ConditionRepository conditionRepository;
     private final SpecializationRepository specializationRepository;
     private final DocumentTypeRepository documentTypeRepository;
+    private final MedicalFacilityRepository medicalFacilityRepository;
 
     private final DocumentMapper documentMapper;
     private final MedicalServiceMapper medicalServiceMapper;
     private final SpecialistMapper specialistMapper;
     private final ScheduleMapper scheduleMapper;
     private final ReviewMapper reviewMapper;
+    private final ServicePriceMapper servicePriceMapper;
     private final SpecializationMapper specializationMapper;
     private final ConditionMapper conditionMapper;
     private final DocumentTypeMapper documentTypeMapper;
+    private final MedicalFacilityMapper medicalFacilityMapper;
 
 
     public Page<MedicalServiceCardDto> getServices(String query, int page) {
-        return medicalServiceRepository.findAllCards(query, PageRequest.of(page, pageSize));
+        return medicalServiceRepository.findAllCards(normalize(query), PageRequest.of(page, pageSize));
     }
 
     public Page<ConditionDto> getConditions(int page, String query) {
@@ -88,8 +95,15 @@ public class MedAssistService {
                 .toList();
     }
 
-    public List<MedicalServiceNameDto> getServiceNames(String query) {
-        return medicalServiceRepository.findAllNames(query);
+    public List<MedicalServiceNameUrlDto> getServiceNames(String query) {
+        return medicalServiceRepository.findAllNameUrl(normalize(query));
+    }
+
+    public List<MedicalFacilityDto> getFacilities() {
+        return medicalFacilityRepository.findAllByOrderByNameAsc()
+                .stream()
+                .map(medicalFacilityMapper::toDto)
+                .toList();
     }
 
     public MedicalServiceDto getServiceDetails(String serviceUrl) {
@@ -100,13 +114,18 @@ public class MedAssistService {
         return medicalServiceMapper.toDto(service);
     }
 
-    public Page<SpecialistCardDto> getSpecialists(String query, String specialization, int page) {
+    public Page<SpecialistCardDto> getSpecialists(String query, java.util.List<Integer> specializationIds, int page) {
 
         Specification<Specialist> spec =
                 SpecialistSpecification.searchActive(
                         normalize(query),
-                        normalize(specialization)
+                        (String) null
                 );
+
+        Specification<Specialist> specByIds = SpecialistSpecification.specializationIn(specializationIds);
+        if (specByIds != null) {
+            spec = spec.and(specByIds);
+        }
 
         return specialistRepository
                 .findAll(spec, PageRequest.of(page, pageSize))
@@ -152,6 +171,22 @@ public class MedAssistService {
                 .schedules(schedules)
                 .reviews(reviews)
                 .build();
+    }
+
+    public List<SpecialistServicePricesDto> getSpecialistServicesPrices(Integer specialistId) {
+        Specialist specialist = specialistRepository.findDetailedById(specialistId)
+                .orElseThrow(() -> new BaseAppException(ExceptionName.SPECIALIST_NOT_FOUND));
+
+        return specialist.getServices().stream()
+                .sorted(Comparator.comparing(MedicalService::getId))
+                .map(service -> new SpecialistServicePricesDto(
+                        service.getId(),
+                        service.getPrices().stream()
+                                .sorted(Comparator.comparing(ServicePrice::getId))
+                                .map(servicePriceMapper::toDto)
+                                .collect(java.util.stream.Collectors.toCollection(java.util.LinkedHashSet::new))
+                ))
+                .toList();
     }
 
     public List<ScheduleDto> getSchedules(Integer specialistId, Integer facilityId, Integer dayOfWeek) {

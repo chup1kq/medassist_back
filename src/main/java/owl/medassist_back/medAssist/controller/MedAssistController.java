@@ -8,12 +8,14 @@ import org.springframework.web.bind.annotation.*;
 import owl.medassist_back.medAssist.dto.condition.ConditionDto;
 import owl.medassist_back.medAssist.dto.document.DocumentDto;
 import owl.medassist_back.medAssist.dto.document.DocumentTypeDto;
+import owl.medassist_back.medAssist.dto.medicalFacility.MedicalFacilityDto;
 import owl.medassist_back.medAssist.dto.medicalService.MedicalServiceDto;
-import owl.medassist_back.medAssist.dto.medicalService.MedicalServiceNameDto;
+import owl.medassist_back.medAssist.dto.medicalService.MedicalServiceNameUrlDto;
 import owl.medassist_back.medAssist.dto.schedule.ScheduleDto;
 import owl.medassist_back.medAssist.dto.search.SearchResponseDto;
 import owl.medassist_back.medAssist.dto.specialist.SpecialistCardDto;
 import owl.medassist_back.medAssist.dto.specialist.SpecialistDto;
+import owl.medassist_back.medAssist.dto.specialist.SpecialistServicePricesDto;
 import owl.medassist_back.medAssist.dto.specialist.SpecializationDto;
 import owl.medassist_back.medAssist.service.MedAssistService;
 
@@ -28,8 +30,13 @@ public class MedAssistController {
     private final MedAssistService medAssistService;
 
     @GetMapping("/services")
-    public List<MedicalServiceNameDto> getServiceNames(@RequestParam(required = false) String query) {
+    public List<MedicalServiceNameUrlDto> getServiceNames(@RequestParam(required = false) String query) {
         return medAssistService.getServiceNames(query);
+    }
+
+    @GetMapping("/facilities")
+    public List<MedicalFacilityDto> getFacilities() {
+        return medAssistService.getFacilities();
     }
 
     @GetMapping("/conditions")
@@ -62,15 +69,20 @@ public class MedAssistController {
     @GetMapping("/specialists")
     public Page<SpecialistCardDto> getSpecialists(
             @RequestParam(required = false) String query,
-            @RequestParam(required = false) String specialization,
+            @RequestParam(required = false, name = "specializationId") List<Integer> specializationId,
             @RequestParam(defaultValue = "0") @Min(0) int page
     ) {
-        return medAssistService.getSpecialists(query, specialization, page);
+        return medAssistService.getSpecialists(query, specializationId, page);
     }
 
     @GetMapping("/specialists/{specialistId}")
     public SpecialistDto getSpecialistDetails(@PathVariable Integer specialistId) {
         return medAssistService.getSpecialistDetails(specialistId);
+    }
+
+    @GetMapping("/specialists/{specialistId}/services")
+    public List<SpecialistServicePricesDto> getSpecialistServicesPrices(@PathVariable @Min(1) Integer specialistId) {
+        return medAssistService.getSpecialistServicesPrices(specialistId);
     }
 
     @GetMapping("/schedules")

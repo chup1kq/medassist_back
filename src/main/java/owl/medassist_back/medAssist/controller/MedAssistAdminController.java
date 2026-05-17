@@ -12,19 +12,25 @@ import owl.medassist_back.medAssist.dto.document.DocumentDto;
 import owl.medassist_back.medAssist.dto.document.DocumentTypeDto;
 import owl.medassist_back.medAssist.dto.document.DocumentTypeUpsertDto;
 import owl.medassist_back.medAssist.dto.document.DocumentUpsertDto;
+import owl.medassist_back.medAssist.dto.medicalService.MedicalServiceConditionIdsDto;
 import owl.medassist_back.medAssist.dto.medicalFacility.MedicalFacilityDto;
+import owl.medassist_back.medAssist.dto.medicalFacility.MedicalFacilityNameDto;
 import owl.medassist_back.medAssist.dto.medicalFacility.MedicalFacilityUpsertDto;
-import owl.medassist_back.medAssist.dto.medicalService.MedicalServiceCardDto;
+import owl.medassist_back.medAssist.dto.medicalFacility.MedicalFacilityScheduleDto;
+import owl.medassist_back.medAssist.dto.medicalFacility.MedicalFacilityScheduleUpsertDto;
+import owl.medassist_back.medAssist.dto.medicalService.MedicalServiceDto;
+import owl.medassist_back.medAssist.dto.medicalService.MedicalServiceNameDto;
 import owl.medassist_back.medAssist.dto.medicalService.MedicalServiceUpsertDto;
 import owl.medassist_back.medAssist.dto.schedule.ScheduleDto;
 import owl.medassist_back.medAssist.dto.schedule.ScheduleUpsertDto;
 import owl.medassist_back.medAssist.dto.servicePrice.ServicePriceDto;
 import owl.medassist_back.medAssist.dto.servicePrice.ServicePriceUpsertDto;
-import owl.medassist_back.medAssist.dto.specialist.SpecialistCardDto;
-import owl.medassist_back.medAssist.dto.specialist.SpecialistUpsertDto;
-import owl.medassist_back.medAssist.dto.specialist.SpecializationDto;
-import owl.medassist_back.medAssist.dto.specialist.SpecializationUpsertDto;
+import owl.medassist_back.medAssist.dto.specialistFacility.SpecialistFacilityDto;
+import owl.medassist_back.medAssist.dto.specialistFacility.SpecialistFacilityUpsertDto;
+import owl.medassist_back.medAssist.dto.specialist.*;
 import owl.medassist_back.medAssist.service.MedAssistAdminService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/admin")
@@ -33,8 +39,13 @@ public class MedAssistAdminController {
 
     private final MedAssistAdminService medAssistAdminService;
 
+    @GetMapping("/services/all")
+    public List<MedicalServiceNameDto> getServices() {
+        return medAssistAdminService.getServicesAll();
+    }
+    
     @GetMapping("/services")
-    public Page<MedicalServiceCardDto> getServices(
+    public Page<MedicalServiceDto> getServices(
             @RequestParam(defaultValue = "0") @Min(0) int page,
             @RequestParam(required = false) String query
     ) {
@@ -43,12 +54,12 @@ public class MedAssistAdminController {
 
     @PostMapping("/services")
     @ResponseStatus(HttpStatus.CREATED)
-    public MedicalServiceCardDto createService(@Valid @RequestBody MedicalServiceUpsertDto request) {
+    public MedicalServiceDto createService(@Valid @RequestBody MedicalServiceUpsertDto request) {
         return medAssistAdminService.createService(request);
     }
 
     @PutMapping("/services/{serviceId}")
-    public MedicalServiceCardDto updateService(@PathVariable Integer serviceId, @Valid @RequestBody MedicalServiceUpsertDto request) {
+    public MedicalServiceDto updateService(@PathVariable Integer serviceId, @Valid @RequestBody MedicalServiceUpsertDto request) {
         return medAssistAdminService.updateService(serviceId, request);
     }
 
@@ -56,6 +67,37 @@ public class MedAssistAdminController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteService(@PathVariable Integer serviceId) {
         medAssistAdminService.deleteService(serviceId);
+    }
+
+    @GetMapping("/services/{serviceId}")
+    public MedicalServiceDto getServiceById(@PathVariable Integer serviceId) {
+        return medAssistAdminService.getServiceById(serviceId);
+    }
+
+    @GetMapping("/services/{serviceId}/indications")
+    public List<ConditionDto> getServiceIndications(@PathVariable Integer serviceId) {
+        return medAssistAdminService.getServiceIndications(serviceId);
+    }
+
+    @PutMapping("/services/{serviceId}/indications")
+    public List<ConditionDto> updateServiceIndications(
+            @PathVariable Integer serviceId,
+            @Valid @RequestBody MedicalServiceConditionIdsDto request
+    ) {
+        return medAssistAdminService.updateServiceIndications(serviceId, request);
+    }
+
+    @GetMapping("/services/{serviceId}/contraindications")
+    public List<ConditionDto> getServiceContraindications(@PathVariable Integer serviceId) {
+        return medAssistAdminService.getServiceContraindications(serviceId);
+    }
+
+    @PutMapping("/services/{serviceId}/contraindications")
+    public List<ConditionDto> updateServiceContraindications(
+            @PathVariable Integer serviceId,
+            @Valid @RequestBody MedicalServiceConditionIdsDto request
+    ) {
+        return medAssistAdminService.updateServiceContraindications(serviceId, request);
     }
 
     @GetMapping("/service-prices")
@@ -83,6 +125,11 @@ public class MedAssistAdminController {
         medAssistAdminService.deleteServicePrice(priceId);
     }
 
+    @GetMapping("/specialists/all")
+    public List<SpecialistNameDto> getSpecialists() {
+        return medAssistAdminService.getSpecialistsAll();
+    }
+    
     @GetMapping("/specialists")
     public Page<SpecialistCardDto> getSpecialists(
             @RequestParam(defaultValue = "0") @Min(0) int page,
@@ -106,6 +153,11 @@ public class MedAssistAdminController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteSpecialist(@PathVariable Integer specialistId) {
         medAssistAdminService.deleteSpecialist(specialistId);
+    }
+
+    @GetMapping("/specialists/{specialistId}")
+    public SpecialistDto getSpecialistById(@PathVariable Integer specialistId) {
+        return medAssistAdminService.getSpecialistById(specialistId);
     }
 
     @GetMapping("/documents")
@@ -159,6 +211,11 @@ public class MedAssistAdminController {
         medAssistAdminService.deleteSchedule(scheduleId);
     }
 
+    @GetMapping("/facilities/all")
+    public List<MedicalFacilityNameDto> getFacilities() {
+        return medAssistAdminService.getFacilitiesAll();
+    }
+    
     @GetMapping("/facilities")
     public Page<MedicalFacilityDto> getFacilities(
             @RequestParam(defaultValue = "0") @Min(0) int page,
@@ -184,12 +241,42 @@ public class MedAssistAdminController {
         medAssistAdminService.deleteFacility(facilityId);
     }
 
+    @GetMapping("/specialist-facilities")
+    public List<SpecialistFacilityDto> getSpecialistFacilities() {
+        return medAssistAdminService.getSpecialistFacilities();
+    }
+
+    @PostMapping("/specialist-facilities")
+    @ResponseStatus(HttpStatus.CREATED)
+    public SpecialistFacilityDto createSpecialistFacility(@Valid @RequestBody SpecialistFacilityUpsertDto request) {
+        return medAssistAdminService.createSpecialistFacility(request);
+    }
+
+    @PutMapping("/specialist-facilities/{specialistFacilityId}")
+    public SpecialistFacilityDto updateSpecialistFacility(
+            @PathVariable Integer specialistFacilityId,
+            @Valid @RequestBody SpecialistFacilityUpsertDto request
+    ) {
+        return medAssistAdminService.updateSpecialistFacility(specialistFacilityId, request);
+    }
+
+    @DeleteMapping("/specialist-facilities/{specialistFacilityId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteSpecialistFacility(@PathVariable Integer specialistFacilityId) {
+        medAssistAdminService.deleteSpecialistFacility(specialistFacilityId);
+    }
+
     @GetMapping("/conditions")
     public Page<ConditionDto> getConditions(
             @RequestParam(defaultValue = "0") @Min(0) int page,
             @RequestParam(required = false) String query
     ) {
         return medAssistAdminService.getConditions(page, query);
+    }
+
+    @GetMapping("/conditions/all")
+    public List<ConditionDto> getAllConditions() {
+        return medAssistAdminService.getAllConditions();
     }
 
     @PostMapping("/conditions")
@@ -217,6 +304,11 @@ public class MedAssistAdminController {
         return medAssistAdminService.getSpecializations(page, query);
     }
 
+    @GetMapping("/specializations/all")
+    public List<SpecializationDto> getSpecializations() {
+        return medAssistAdminService.getSpecializationsAll();
+    }
+
     @PostMapping("/specializations")
     @ResponseStatus(HttpStatus.CREATED)
     public SpecializationDto createSpecialization(@Valid @RequestBody SpecializationUpsertDto request) {
@@ -232,6 +324,11 @@ public class MedAssistAdminController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteSpecialization(@PathVariable Integer specializationId) {
         medAssistAdminService.deleteSpecialization(specializationId);
+    }
+
+    @GetMapping("/document-types/all")
+    public List<DocumentTypeDto> getDocumentTypes() {
+        return medAssistAdminService.getDocumentTypesAll();
     }
 
     @GetMapping("/document-types")
@@ -257,5 +354,41 @@ public class MedAssistAdminController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteDocumentType(@PathVariable Integer documentTypeId) {
         medAssistAdminService.deleteDocumentType(documentTypeId);
+    }
+
+    @GetMapping("/facilities/{facilityId}/schedules")
+    public List<MedicalFacilityScheduleDto> getFacilitySchedules(
+            @PathVariable @Min(1) Integer facilityId
+    ) {
+        return medAssistAdminService.getFacilitySchedules(facilityId);
+    }
+
+
+    @PostMapping("/facilities/{facilityId}/schedules")
+    @ResponseStatus(HttpStatus.CREATED)
+    public MedicalFacilityScheduleDto createFacilitySchedule(
+            @PathVariable @Min(1) Integer facilityId,
+            @Valid @RequestBody MedicalFacilityScheduleUpsertDto scheduleDto
+    ) {
+        return medAssistAdminService.createFacilitySchedule(facilityId, scheduleDto);
+    }
+
+
+    @PutMapping("/facilities/{facilityId}/schedules")
+    public MedicalFacilityScheduleDto upsertFacilitySchedule(
+            @PathVariable @Min(1) Integer facilityId,
+            @Valid @RequestBody MedicalFacilityScheduleUpsertDto scheduleDto
+    ) {
+        return medAssistAdminService.upsertFacilitySchedule(facilityId, scheduleDto);
+    }
+
+
+    @DeleteMapping("/facilities/{facilityId}/schedules/{scheduleId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteFacilitySchedule(
+            @PathVariable @Min(1) Integer facilityId,
+            @PathVariable @Min(1) Integer scheduleId
+    ) {
+        medAssistAdminService.deleteFacilitySchedule(facilityId, scheduleId);
     }
 }
