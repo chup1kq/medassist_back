@@ -83,6 +83,7 @@ public interface MedicalServiceRepository extends JpaRepository<MedicalService, 
     @Query("""
                 select new owl.medassist_back.medAssist.dto.medicalService.MedicalServiceCardDto(
                     s.id,
+                    s.misId,
                     s.name,
                     s.description,
                     s.url,

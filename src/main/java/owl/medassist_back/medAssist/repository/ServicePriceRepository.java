@@ -19,6 +19,7 @@ public interface ServicePriceRepository extends JpaRepository<ServicePrice, Inte
     @Query("""
             select new owl.medassist_back.medAssist.dto.servicePrice.ServicePriceDto(
                 sp.id,
+                sp.misId,
                 sp.name,
                 sp.price,
                 s.id,

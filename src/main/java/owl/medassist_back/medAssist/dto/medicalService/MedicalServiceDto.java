@@ -15,6 +15,7 @@ public record MedicalServiceDto(
         String preparation,
         String url,
         String photoUrl,
+        Integer misId,
         List<ServicePriceDto> prices,
         List<ConditionDto> indications,
         List<ConditionDto> contraindications,

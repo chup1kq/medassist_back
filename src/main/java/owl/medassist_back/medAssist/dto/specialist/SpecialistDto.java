@@ -12,6 +12,7 @@ public record SpecialistDto(
         String fullName,
         String description,
         Integer experienceYears,
+        Integer misId,
         String photoUrl,
         Boolean active,
         List<SpecializationDto> specializations,
